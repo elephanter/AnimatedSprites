@@ -26,6 +26,16 @@ Tryed to make fast and useful animated sprites for Three.js library.
                                     speed: 200,           //full animation time ms.
                                     rotationAroundX: 0,   //degrees
                                     spriteRotation: 0     //degrees
+                                },
+                                run: {
+                                    offset:[0, 32],
+                                    size:[64*3, 64],
+                                    frameWidth: 64,
+                                    frameHeight: 64,
+                                    framesCount: 6,
+                                    speed: 400,           //full animation time ms.
+                                    rotationAroundX: 0,   //degrees
+                                    spriteRotation: 0     //degrees
                                 }
                             }
                         }
