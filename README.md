@@ -38,6 +38,6 @@ Tryed to make fast and useful animated sprites for Three.js library.
     
 also do not forget to write
 
-  THREE.AnimatedSprites.update(delta);
+    THREE.AnimatedSprites.update(delta);
   
 in yours render function
