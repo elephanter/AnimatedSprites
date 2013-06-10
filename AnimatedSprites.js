@@ -27,7 +27,6 @@ THREE.AnimatedSprites = (function(){
     var fragmentShader = [
                           "uniform sampler2D spriteTexture;",   //sprite texture
                           "uniform int speed;",                 //time to spend for all animations
-                          "uniform int frameWidth;",            //width of each frame
                           "uniform int framesCount;",           //how many frames in this sprite
                           "varying vec2 vUv;",
                           "uniform float time;",
@@ -150,4 +149,5 @@ THREE.AnimatedSprites = (function(){
 uvOffset: { type: "v2", value: newOptions.uvOffset || shaderUniform.uvOffset.value || new THREE.Vector2(0,0) },
                         uvScale: { type: "v2", value: newOptions.uvScale || shaderUniform.uvScale.value || new THREE.Vector2(1,1) },
                                                     useScreenCoordinates: { type: "f", value: newOptions.useScreenCoordinates || shaderUniform.useScreenCoordinates.value || 0.0 },
+                                                    "uniform int frameWidth;",            //width of each frame
 */
