@@ -1,11 +1,11 @@
 THREE.AnimatedSprites = (function(){
     var vertexShader = [
-                          "uniform float rotationAroundX;",
+                          "uniform float rotationAroundX;", //if sprite rotated - it willbe not faced to camera
                           "uniform float spriteRotation;",
+                          "uniform int notFaced;",          //do not rotate plane face to camera
                           "uniform vec2 scale;",
                           "varying vec2 vUv;",
-                          "void main()",
-                          "{",
+                          "void main(){",
                             "vUv = uv;",
                             "vec3 realPosition = position;",
                             "if (spriteRotation != 0.0){",
@@ -17,20 +17,21 @@ THREE.AnimatedSprites = (function(){
                                 "rotatedPosition.y =  (cos( rotationAroundX ) * realPosition.y + sin( rotationAroundX ) * realPosition.z)*scale.y ;",
                                 "rotatedPosition.z = (-sin( rotationAroundX ) * realPosition.y + cos( rotationAroundX ) * realPosition.z)*scale.y;",
                                 "gl_Position = projectionMatrix * modelViewMatrix * vec4(rotatedPosition, 1.0);",
+                            "} else if (notFaced>0) {",
+                                "gl_Position = projectionMatrix * modelViewMatrix * vec4(vec3(realPosition.x*scale.x, realPosition.y*scale.y, realPosition.z), 1.0);",
                             "} else {",
                                 "gl_Position = projectionMatrix * (modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0) + vec4(realPosition.x*scale.x, realPosition.y*scale.y, 0.0, 0.0));",
                             "}",
                           "}"
                         ].join("\n");
     var fragmentShader = [
-                          "uniform sampler2D spriteTexture;        //sprite texture",
-                          "uniform int speed;      //time to spend for all animations",
-                          "uniform int frameWidth;          //width of each frame",
-                          "uniform int framesCount;     //how many frames in this sprite",
+                          "uniform sampler2D spriteTexture;",   //sprite texture
+                          "uniform int speed;",                 //time to spend for all animations
+                          "uniform int frameWidth;",            //width of each frame
+                          "uniform int framesCount;",           //how many frames in this sprite
                           "varying vec2 vUv;",
                           "uniform float time;",
-                          "void main()",
-                          "{",
+                          "void main(){",
                             "int frameId = int(floor(mod(time, float(speed) )/(float(speed)/float(framesCount))));",
                             "float oneFrameWidth = 1.0/float(framesCount);",
                             "vec2 uvOffset = vec2(oneFrameWidth*float(frameId)+vUv.x*oneFrameWidth, vUv.y);",
@@ -60,7 +61,8 @@ THREE.AnimatedSprites = (function(){
             spriteTexture: {type: "t", value: null},
             speed: {type: "i", value: null},
             frameWidth: {type: "i", value: null},
-            framesCount: {type: "i", value: null}
+            framesCount: {type: "i", value: null},
+            notFaced: {type:"i", value: 0}
         };
 
         //allows change sprite speed, rotation or texture
@@ -72,7 +74,7 @@ THREE.AnimatedSprites = (function(){
             shaderUniform.rotationAroundX.value= newOptions.rotationAroundX*Math.PI/180 || shaderUniform.rotationAroundX.value || 0.0;
             shaderUniform.spriteRotation.value= newOptions.spriteRotation*Math.PI/180 || shaderUniform.spriteRotation.value || 0.0;
             shaderUniform.spriteTexture.value= newOptions.spriteTexture || shaderUniform.spriteTexture.value;
-
+            shaderUniform.notFaced.value= newOptions.notFaced || 0;
         };
         this.changeOptions(spriteOptions);
 
